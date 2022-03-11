@@ -1,11 +1,19 @@
 const express = require('express')
 const Food = require('../models/Food');
+const Category = require('../models/Category')
 const {body, validationResult}  = require("express-validator");
 const e = require('express');
+const { Op } = require('sequelize')
 
 
 const foodAll = (req, res)=> {
-    Food.findAll()
+    Food.findAll({
+        include:[
+            {
+                model: Category,
+            },
+        ],
+    })
         .then(data=> res.json({data:data}))
         .catch((err) => res.json({data:err}))
 }

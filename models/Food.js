@@ -1,5 +1,5 @@
 
-
+const Category = require('../models/Category')
 const { Sequelize, DataTypes } = require('@sequelize/core')
 const sequelize = require('../database')
 
@@ -25,7 +25,7 @@ const Food =  sequelize.define('food', {
         type: DataTypes.INTEGER,
         allowNull: false
     },
-    categoryId:{
+    foodCategoryId:{
         type: DataTypes.INTEGER,
         allowNull: false
     }
@@ -35,6 +35,9 @@ const Food =  sequelize.define('food', {
     timestamps: false
 });
 
+
+Category.hasMany(Food);
+Food.belongsTo(Category);
 
 async () => {
     await Food.sync({alter: true});

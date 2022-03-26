@@ -1,47 +1,66 @@
 
-const Category = require('../models/Category')
-const { Sequelize, DataTypes } = require('@sequelize/core')
-const sequelize = require('../database')
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
-const Food =  sequelize.define('food', {
+const FoodSchema = new Schema({
+  name: {
+    type: String,
+    required: [true, "Oh Come on! Food name is must!"],
+  },
+  price: {
+    type: Number,
+    minimum: 0,
+  },
+  discount: {
+    type: Number,
+    minimum: 0,
+    default: 0,
+  },
+  portion: {
+    type: Number,
+    minimum: 1,
+  },
+  stock: {
+    type: Number,
+    minimum: 0,
+  },
+  ingredients: {
+    type: String,
+  },
+  status: {
+    type: String,
+  },
+  sales: {
+    type: Boolean,
+    default: false,
+  },
+  image: {
+    type: String,
+  },
+  tumb_img: {
+    type: String,
+  },
+  category: {
     name: {
-        type: DataTypes.STRING,
-        allowNull: false
+      type: String
     },
-    price:
-    {
-        type: DataTypes.INTEGER,
-        allowNull: false
-    },
-    portion : {
-        type: DataTypes.INTEGER,
-        allowNull: false
-    },
-    discount: {
-        type: DataTypes.INTEGER,
-        allowNull: true
-    },
-    stock:{
-        type: DataTypes.INTEGER,
-        allowNull: false
-    },
-    foodCategoryId:{
-        type: DataTypes.INTEGER,
-        allowNull: false
+    color: {
+      type: String
     }
-    
-},
-{
-    timestamps: false
+  }
 });
 
-
-Category.hasMany(Food);
-Food.belongsTo(Category);
-
-async () => {
-    await Food.sync({alter: true});
-}
-
+const Food = mongoose.model("food", FoodSchema);
 
 module.exports = Food;
+
+ // category_id: {
+  //   type: String,
+  // },
+
+// yag object ID baidlaar normalized holbolt hiisen tohioldold
+
+  // category_id:[{ 
+  //   type: Schema.Types.ObjectId, 
+  //   ref: 'food_category' 
+  // }],

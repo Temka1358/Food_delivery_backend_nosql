@@ -1,49 +1,44 @@
-const express = require('express')
-const Food = require('../models/Food');
-const Category = require('../models/Category')
-const {body, validationResult}  = require("express-validator");
-const e = require('express');
-const { Op } = require('sequelize')
+const express = require("express")
+const Food = require('../models/Food')
+const {body, validationResult} = require("express-validator")
 
-
-const foodAll = (req, res)=> {
-    Food.findAll({
-        include:[
-            {
-                model: Category,
-            },
-        ],
+const getFoods = async(req, res, nex)=>{
+    Food.find({}, function(err, data){
+        if (err) res.json({success: false, data: err})
+        else res.json({success: true, data: data})
     })
-        .then(data=> res.json({data:data}))
-        .catch((err) => res.json({data:err}))
 }
 
-const addFood = (req,res)=>{
-    console.log("controller running")
-    console.log(req)
-    const errors = validationResult(req);
-    console.log("after validatation in controller")
-    if(!errors.isEmpty()){
-        return res.status(400).json({success: false, errors: errors.array()})
-    }else{
-        Food.create(req.body)
-        .then(result=> res.json({success: true, data: result}))
-        .catch((err) => res.json({data:err}))
+const createFood = (req, res) =>{
+    const error = validationResult(req)
+    console.log(error)
+    if (error.isEmpty()){
+        Food.create(req.body, function(err, data){
+            if (err) res.json({success: false, data: err})
+            else res.json({screen: true, data: data})
+        })
     }
+    else{
+        return res.status(400).json({success: false, errors: errors.array()})
+    }
+};
+
+const updateFood = (req, res) =>{
+    Food.updateOne({_id: req.params.id}, req.body, function(err, data){
+        if (err) res.json({success: false, data: err})
+        else res.json({succes: true, data: data})
+    })
+}
+const deleteFood = (req, res) =>{
+    Food.findOneAndDelete({_id: req.params.id}, function(err, data){
+        if (err) res.json({success: false, data: err})
+        else res.json({succes: true, data: data})
+    })
 }
 
-const updateFoodPrice = (req,res) =>{
-    Food.update(req.body, {where: {id: req.params.id}})
-    .then(data=> res.json({success: true, data: `Food with id=${req.params.id}, price updated to ${req.body.price}`}))
-    .catch(err=> res.json({succes: false, data: `Error: ${err}`}));
+module.exports = {
+    getFoods,
+    createFood,
+    updateFood,
+    deleteFood
 }
-
-const deleteFood = (req,res) =>{
-    Food.destroy({where: {
-        id: req.params.id
-    }})
-        .then(data=>res.json({success: true, data: "Food deleted"}))
-        .catch(err=> res.json({success: false, data: "Cn not delete", error: err}))
-}
-
-    module.exports =  {foodAll, updateFoodPrice, deleteFood, addFood};

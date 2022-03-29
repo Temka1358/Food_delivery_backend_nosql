@@ -1,11 +1,7 @@
-const express = require('express')
+const express = require("express");
+const router = express.Router();
+const Authcontroller = require("../controller/Authcontroller");
+router.post("/register", Authcontroller.register);
+router.post("/login", Authcontroller.login)
 
-
-const app = new express()
-
-app.get('/', (req, res)=>{
-    res.send("admin route")
-})
-
-
-module.exports = app;
+module.exports = router;

@@ -28,7 +28,7 @@ const OrderSchema = new Schema({
   },
   order_detail: {
     food_id: {
-      type: String,
+      type: Schema.Types.ObjectId,
       ref: "food",
       required: [true, "Enter the food id!"],
     },

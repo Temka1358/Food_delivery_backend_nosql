@@ -9,7 +9,7 @@ const userController = require("../controller/userController");
 const orderController = require("../controller/orderController");
 const auth = require('../middleware/auth')
 
-router.get("/foods", auth, foodController.get_foods);
+router.get("/foods", foodController.get_foods);
 router.post("/createfood", middleware.createfood(), foodController.create_food);
 router.post("/updatefood/:id", foodController.updatefood);
 router.get("/deletefood/:id", foodController.deletefood);
@@ -27,6 +27,7 @@ router.post(
 router.post("/updateuser/:id", userController.updateUser);
 router.get("/usersearch", userController.user_search);
 router.get("/deleteuser/:id", userController.delete_user);
+
 
 router.get("/orders", orderController.get_orders);
 router.post(
